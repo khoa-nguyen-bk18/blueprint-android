@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Error severity for critical issues -->
+    <issue id="HardcodedText" severity="error">
+        <ignore path="**/test/**" />
+        <ignore path="**/androidTest/**" />
+    </issue>
+    
+    <issue id="UnusedResources" severity="error" />
+    
+    <issue id="MissingTranslation" severity="warning" />
+    
+    <!-- Architecture violations -->
+    <issue id="UnsafeNativeCodeLocation" severity="error" />
+    
+    <issue id="Recycle" severity="error" />
+    
+    <!-- Security issues -->
+    <issue id="HardcodedDebugMode" severity="error" />
+    
+    <issue id="SetJavaScriptEnabled" severity="error" />
+    
+    <issue id="ExportedReceiver" severity="error" />
+    
+    <issue id="ExportedService" severity="error" />
+    
+    <issue id="WorldReadableFiles" severity="error" />
+    
+    <issue id="WorldWriteableFiles" severity="error" />
+    
+    <!-- Performance issues -->
+    <issue id="UnusedIds" severity="warning" />
+    
+    <issue id="UselessParent" severity="warning" />
+    
+    <issue id="InefficientWeight" severity="warning" />
+    
+    <issue id="NestedWeights" severity="warning" />
+    
+    <issue id="DisableBaselineAlignment" severity="warning" />
+    
+    <!-- Correctness issues -->
+    <issue id="MissingPermission" severity="error" />
+    
+    <issue id="InvalidPackage" severity="error" />
+    
+    <!-- Kotlin specific -->
+    <issue id="KotlinPropertyAccess" severity="warning" />
+    
+    <issue id="KotlinNullnessAnnotation" severity="warning" />
+    
+    <!-- Compose specific -->
+    <issue id="UnnecessaryComposedModifier" severity="warning" />
+    
+    <!-- Disable overly strict rules that don't apply to modern Android -->
+    <issue id="ObsoleteLintCustomCheck" severity="ignore" />
+    
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+    
+    <issue id="IconDensities" severity="ignore" />
+    
+    <issue id="IconDipSize" severity="ignore" />
+    
+    <issue id="IconDuplicatesConfig" severity="ignore" />
+    
+    <issue id="IconLauncherShape" severity="ignore" />
+    
+    <issue id="VectorDrawableCompat" severity="ignore" />
+    
+    <issue id="ObsoleteSdkInt" severity="warning" />
+</lint>
