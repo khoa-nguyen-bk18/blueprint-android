@@ -18,4 +18,8 @@
     <string name="app_name">BluePrint</string>
     <string name="save_button">Save</string>
     <string name="saved_item">Saved item: %1$s</string>
+    <string name="qr_scanner_title">QR Scanner</string>
+    <string name="qr_scanner_permission_rationale">Camera access is required to scan QR codes.</string>
+    <string name="qr_scanner_error">Failed to scan QR code.</string>
+    <string name="qr_scanner_retry">Retry</string>
 </resources>

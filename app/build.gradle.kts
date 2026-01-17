@@ -189,3 +189,9 @@ tasks.register("qualityCheck") {
         println("   - Unit Tests (including ArchUnit)")
     }
 }
+
+// Termux-specific quality check task
+tasks.register("qualityCheckTermux") {
+    group = "verification"
+    dependsOn("spotlessCheck", ":detekt")
+}
