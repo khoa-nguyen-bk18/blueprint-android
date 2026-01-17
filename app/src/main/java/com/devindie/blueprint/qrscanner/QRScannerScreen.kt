@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun QRScannerScreen(
     modifier: Modifier = Modifier,
     viewModel: QRScannerViewModel = hiltViewModel(),
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -29,7 +29,7 @@ fun QRScannerScreen(
             if (!granted) {
                 viewModel.onError("Camera permission denied")
             }
-        }
+        },
     )
 
     val requestOnce = remember { true }
@@ -38,6 +38,8 @@ fun QRScannerScreen(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
+        Button(onClick = onBack) { Text(text = "Back") }
+
         when (uiState) {
             is QRScannerUiState.Loading -> {
                 Text(text = "Starting camera...")
