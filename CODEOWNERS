@@ -1,0 +1,7 @@
+# Adjust owners to your org/team.
+# Protect core architecture / build config.
+/build.gradle.kts @your-github-handle
+/settings.gradle.kts @your-github-handle
+/gradle/libs.versions.toml @your-github-handle
+/docs/ai/ @your-github-handle
+/tools/ @your-github-handle
