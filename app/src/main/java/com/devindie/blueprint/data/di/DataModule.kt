@@ -16,7 +16,9 @@
 
 package com.devindie.blueprint.data.di
 
+import com.devindie.blueprint.data.DefaultLoginRepository
 import com.devindie.blueprint.data.DefaultMainScreenRepository
+import com.devindie.blueprint.data.LoginRepository
 import com.devindie.blueprint.data.MainScreenRepository
 import dagger.Binds
 import dagger.Module
@@ -36,6 +38,12 @@ interface DataModule {
     fun bindsMainScreenRepository(
         mainScreenRepository: DefaultMainScreenRepository,
     ): MainScreenRepository
+
+    @Singleton
+    @Binds
+    fun bindsLoginRepository(
+        loginRepository: DefaultLoginRepository,
+    ): LoginRepository
 }
 
 class FakeMainScreenRepository @Inject constructor() : MainScreenRepository {
