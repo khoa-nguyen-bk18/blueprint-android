@@ -2,7 +2,7 @@
 
 - Repo: blueprint-android
 - Branch: feature/cameraqr
-- Commit: 489fae4
+- Commit: 2674fc2
 
 ## AI Protocol
 ### .ai/prompts/MASTER_PROMPT.md
@@ -153,7 +153,7 @@ Add links/paths to 2–4 "best in repo" examples so AI copies patterns instead o
 ```
 
 ## Latest Session (if any)
-### .ai/sessions/2026-01-23__login-feature.md
+### .ai/sessions/2026-01-25__splashscreen.md
 ```
 # Session: YYYY-MM-DD — Feature: <name>
 
@@ -206,10 +206,8 @@ Do not touch files outside allowlist/contract without revising contract.
 
 ## Git Status
 ```
-?? .ai/
-?? .github/pull_request_template.md
-?? CODEOWNERS
-?? docs/
-?? setup.md
-?? tools/
+ M .ai/context/AI_CONTEXT.md
+?? .ai/sessions/2026-01-25__splashscreen.md
+?? docs/20260125-splash-screen.md
+?? tools/spec-wizard.tui.sh
 ```

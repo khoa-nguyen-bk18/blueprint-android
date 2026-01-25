@@ -25,12 +25,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.devindie.blueprint.ui.login.LoginScreen
 import com.devindie.blueprint.ui.mainscreen.MainScreenScreen
+import com.devindie.blueprint.ui.splash.SplashScreen
 
 @Composable
 fun MainNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            SplashScreen(
+                onNavigateToLogin = { navController.navigate("login") },
+            )
+        }
         composable("login") {
             LoginScreen(
                 onNavigateToMain = { navController.navigate("main") },

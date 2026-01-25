@@ -1,1 +1,7 @@
 # Generated per session from the approved Change Contract.
+.ai/allowlist.txt
+app/src/main/java/com/devindie/blueprint/ui/Navigation.kt
+app/src/main/java/com/devindie/blueprint/ui/splash/SplashScreen.kt
+.ai/sessions/2026-01-25__splashscreen.md
+docs/20260125-splash-screen.md
+
