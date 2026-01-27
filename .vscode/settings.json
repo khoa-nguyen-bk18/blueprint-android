@@ -1,5 +1,17 @@
 {
     "chat.tools.terminal.autoApprove": {
-        "git init": true
+        "git init": true,
+        "/^bash spec-wizard\\.tui\\.sh 2>&1 \\| head -5$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^bash -n spec-wizard\\.tui\\.sh && echo \"✅ Syntax check passed\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^bash -n /Users/khoa/PROJECTS/HelloAI/architecture-templates/spec-wizard\\.tui\\.sh && echo \"✅ Syntax OK\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }

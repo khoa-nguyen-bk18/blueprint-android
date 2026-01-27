@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TBD="TBD"
+TBD="N/A"
 
 need_cmd() { command -v "$1" >/dev/null 2>&1; }
 
@@ -48,20 +48,83 @@ section_title() {
   gum style --bold --padding "0 0" --margin "1 0" "$1"
 }
 
+file_picker() {
+  local prompt="${1:-Select file/folder:}"
+  local multi="${2:-false}"
+  
+  # Find all files and folders relative to current directory
+  local files
+  files=$(find . -type f -o -type d | sed 's|^\./||' | grep -v '^\.git' | sort)
+  
+  if [[ -z "$files" ]]; then
+    echo ""
+    return
+  fi
+  
+  local selected
+  if [[ "$multi" == "true" ]]; then
+    selected=$(echo "$files" | gum choose --no-limit --header "$prompt (Space to select, Enter to confirm)" || true)
+  else
+    selected=$(echo "$files" | gum choose --header "$prompt" || true)
+  fi
+  
+  if [[ -z "$selected" ]]; then
+    echo ""
+    return
+  fi
+  
+  # Convert to markdown links
+  local result=""
+  while IFS= read -r path; do
+    [[ -z "$path" ]] && continue
+    local basename=$(basename "$path")
+    if [[ -n "$result" ]]; then
+      result+=", "
+    fi
+    result+="[${basename}](${path})"
+  done <<< "$selected"
+  
+  echo "$result"
+}
+
 # -----------------------------
 # Wizard start
 # -----------------------------
-gum style --bold --border rounded --padding "1 2" "Feature Spec Wizard (BA + UX) → Markdown"
+gum style --bold --border rounded --padding "1 2" "BA → Senior Dev Ticket Wizard"
 
-FEATURE_NAME="$(gum input --prompt "Feature name: " --placeholder "e.g., Local Login Validation")"
-[[ -z "${FEATURE_NAME//[[:space:]]/}" ]] && { echo "Feature name is required."; exit 1; }
+# Template selection
+TEMPLATE=$(gum choose \
+  "1) New Feature Delivery" \
+  "2) Change Request to Existing Feature" \
+  "3) Bug & Correctness" \
+  "4) Feasibility / Design Consultation" \
+  "5) Integration & Dependencies" \
+  "6) Data & Analytics Request" \
+  "7) Quality / Performance / Reliability" \
+  "8) Security / Privacy / Compliance" \
+  "9) Release / Operations" \
+  "10) Tech Debt / Maintainability" \
+  "11) AI-era Workflow / Guardrails")
 
-SLUG="$(slugify "$FEATURE_NAME")"
+TEMPLATE_NUM=$(echo "$TEMPLATE" | cut -d')' -f1)
+
+gum style --bold "Selected: $TEMPLATE"
+echo ""
+gum style --italic "💡 Tip: Type '#' in any field to reference files/folders from workspace"
+echo ""
+
+# Common fields
+TITLE="$(gum input --prompt "Title: " --placeholder "e.g., Implement user login validation")"
+[[ -z "${TITLE//[[:space:]]/}" ]] && { echo "Title is required."; exit 1; }
+
+SLUG="$(slugify "$TITLE")"
 DATE_YMD="$(date +%Y-%m-%d)"
 DATE_PREFIX="$(date +%Y%m%d)"
-VERSION="$(gum input --prompt "Spec version: " --value "0.1" --placeholder "e.g., 0.1")"
 
 PRIORITY="$(gum choose "P0 (must)" "P1 (should)" "P2 (nice)" "P3 (later)")"
+TARGET_RELEASE="$(gum input --prompt "Target release/deadline: " --placeholder "e.g., v2.5.0 or 2026-02-15")"
+OWNER_BA="$(gum input --prompt "Owner (BA): " --placeholder "Your name")"
+STAKEHOLDERS="$(gum write --placeholder "Stakeholders (one per line). Press ESC or Ctrl+D when done." --width 80 --height 5 || true)"
 
 section_title "A) Overview"
 SUMMARY="$(gum input --prompt "One-line summary: " --placeholder "What is this feature?")"
