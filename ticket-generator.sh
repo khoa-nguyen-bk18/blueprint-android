@@ -4,6 +4,12 @@
 SPECS_DIR="specs"
 DATE_PREFIX=$(date +%Y%m%d)
 
+# --- DYNAMIC WIDTH CALCULATION ---
+# Get current terminal columns. Default to 40 if detection fails.
+TERM_COLS=$(tput cols 2>/dev/null || echo 40)
+# Leave a small margin (2 chars) for aesthetics and to prevent edge wrapping glitches
+WIDTH=$((TERM_COLS - 2))
+
 # Ensure dependencies exist
 if ! command -v gum &> /dev/null; then
     echo "Error: 'gum' is not installed."
@@ -17,17 +23,10 @@ fi
 mkdir -p "$SPECS_DIR"
 
 # --- HELPER: SMART FILE LISTING ---
-# This function respects .gitignore if present, otherwise filters common junk
 get_file_list() {
     if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-        # 1. Best method: Use git to respect .gitignore
-        # --cached: files in index
-        # --others: new files not added yet
-        # --exclude-standard: apply .gitignore rules
         git ls-files --cached --others --exclude-standard
     else
-        # 2. Fallback: Standard find (recursive)
-        # Excludes: .git, node_modules, .DS_Store
         find . -type f \
             -not -path '*/.*' \
             -not -path '*/node_modules/*' \
@@ -39,24 +38,20 @@ get_file_list() {
 
 # --- INPUT HANDLERS ---
 
-# Function to handle single-line input with '#' file trigger
+# Function to handle single-line input
 ask_input() {
     local prompt="$1"
     local placeholder="$2"
     local value=""
     
     while true; do
-        # 1. Output prompt to STDERR
         gum style --foreground 212 -- "$prompt" >&2
         
-        # 2. Capture user input
-        input=$(gum input --placeholder "$placeholder" --value "$value" --width 80)
+        # Use $WIDTH variable here
+        input=$(gum input --placeholder "$placeholder" --value "$value" --width "$WIDTH")
         
-        # 3. Check for Trigger (# at the end)
         if [[ "$input" =~ \#$ ]]; then
             base_input="${input%#}"
-            
-            # Select file using the smart list function
             selected_file=$(get_file_list | fzf --height=40% --layout=reverse --border --prompt="Select file > " --preview 'head -n 10 {}')
             
             if [[ -n "$selected_file" ]]; then
@@ -76,27 +71,24 @@ ask_input() {
     done
 }
 
-# Function to handle multi-line input with '#' file trigger
+# Function to handle multi-line input (The Text Area)
 ask_text() {
     local header="$1"
     local placeholder="$2"
     local value=""
 
     while true; do
-        # 1. Output Headers to STDERR
         gum style --foreground 212 -- "$header" >&2
-        echo -e "\033[2m(Type '#' at end and press Ctrl+D to insert file)\033[0m" >&2
+        echo -e "\033[2m(Type '#' at end + Ctrl+D to insert file)\033[0m" >&2
         
-        # 2. Capture input
-        input=$(gum write --placeholder "$placeholder" --value "$value" --width 80 --height 10 --show-cursor-line --show-line-numbers)
+        # Use $WIDTH variable here. 
+        # --soft-wrap helps text flow naturally on small screens.
+        input=$(gum write --placeholder "$placeholder" --value "$value" --width "$WIDTH" --height 10 --show-cursor-line --show-line-numbers)
         
-        # 3. Check for Trigger (# at end)
         trimmed_input=$(echo "$input" | sed 's/[[:space:]]*$//')
         
         if [[ "$trimmed_input" =~ \#$ ]]; then
             base_input="${trimmed_input%#}"
-            
-            # Select file using smart list
             selected_file=$(get_file_list | fzf --height=40% --layout=reverse --border --prompt="Select file > " --preview 'head -n 10 {}')
             
             if [[ -n "$selected_file" ]]; then
@@ -120,7 +112,7 @@ slugify() {
     echo "$1" | iconv -t ascii//TRANSLIT | sed -r s/[^a-zA-Z0-9]+/-/g | sed -r s/^-+\|-+$//g | tr A-Z a-z
 }
 
-# --- TEMPLATE SELECTION ---
+# --- UI START ---
 
 clear
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 -- "BA → Senior Dev Ticket Wizard"
@@ -141,8 +133,7 @@ TEMPLATE=$(gum choose \
 TEMPLATE_ID=$(echo "$TEMPLATE" | cut -d')' -f1)
 TEMPLATE_NAME=$(echo "$TEMPLATE" | cut -d')' -f2 | xargs)
 
-# --- COMMON HEADER ---
-
+# --- HEADER ---
 gum style --foreground 99 -- "--- Ticket Header ---" >&2
 TITLE=$(ask_input "Ticket Title:" "e.g. Implement Login Validation")
 PRIORITY=$(gum choose "P0 (Critical)" "P1 (High)" "P2 (Medium)" "P3 (Low)" | cut -d' ' -f1)
@@ -152,7 +143,7 @@ STAKEHOLDERS=$(ask_input "Stakeholders:" "Names of interested parties")
 
 CONTENT=""
 
-# --- FIELD DEFINITIONS ---
+# --- TEMPLATES ---
 
 collect_feature() {
     gum style --foreground 99 -- "--- Problem & Goal ---" >&2
