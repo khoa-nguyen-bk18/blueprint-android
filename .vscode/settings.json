@@ -12,6 +12,11 @@
         "/^bash -n /Users/khoa/PROJECTS/HelloAI/architecture-templates/spec-wizard\\.tui\\.sh && echo \"✅ Syntax OK\"$/": {
             "approve": true,
             "matchCommandLine": true
-        }
+        },
+        "/^cd /Users/khoa\\.nguyen/SIDE_PROJECTS/blueprint-android && bash -c '\n# Test if the function works\nfile_picker\\(\\) \\{\n  echo \"\\[test\\.txt\\]\\(test\\.txt\\)\"\n\\}\nexport -f file_picker\n\nresult=\\$\\(bash -i <<'\\\\''BASH'\\\\'' 2>&1\n_fzf_insert_file\\(\\) \\{\n  local picked\n  picked=\\$\\(file_picker \"Select file/folder\" \"false\"\\)\n  if \\[\\[ -n \"\\$picked\" \\]\\]; then\n    READLINE_LINE=\"\\$\\{READLINE_LINE:0:\\$READLINE_POINT\\}\\$\\{picked\\}\\$\\{READLINE_LINE:\\$READLINE_POINT\\}\"\n    READLINE_POINT=\\$\\(\\(READLINE_POINT \\+ \\$\\{#picked\\}\\)\\)\n  fi\n\\}\nbind -x '\\\\'\\\\''\"\\\\\\\\C-f\": _fzf_insert_file'\\\\''\\\\'\\\\'\necho \"Test result: OK\"\nBASH\n\\)\necho \"\\$result\"\n'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "./spec-wizard.tui.sh": true
     }
 }
